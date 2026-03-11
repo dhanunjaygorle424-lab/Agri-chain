@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Admin Home{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-danger"><i class="fas fa-user-shield"></i> Admin Dashboard</h3>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                <h5>Manage Buyers</h5>
+                <p>Activate or manage buyer accounts</p>
+                <a href="{% url 'AdminActivateBuyers' %}" class="btn btn-primary">Manage Buyers</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-store fa-3x text-success mb-3"></i>
+                <h5>Manage Sellers</h5>
+                <p>Activate or manage seller accounts</p>
+                <a href="{% url 'AdminActivateSellers' %}" class="btn btn-success">Manage Sellers</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-link fa-3x text-info mb-3"></i>
+                <h5>Blockchain Transactions</h5>
+                <p>View all blockchain records</p>
+                <a href="{% url 'AdminViewBlockChainTransactions' %}" class="btn btn-info">View Transactions</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Manage Sellers{% endblock %}
+{% block content %}
+<h3 class="text-danger"><i class="fas fa-store"></i> Manage Sellers</h3>
+<hr>
+{% if sellers %}
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Login ID</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>City</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for seller in sellers %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ seller.name }}</td>
+                <td>{{ seller.loginid }}</td>
+                <td>{{ seller.email }}</td>
+                <td>{{ seller.mobile }}</td>
+                <td>{{ seller.city }}</td>
+                <td>
+                    <span class="badge badge-{% if seller.status == 'activated' %}success{% elif seller.status == 'blocked' %}danger{% else %}warning{% endif %}">
+                        {{ seller.status }}
+                    </span>
+                </td>
+                <td>
+                    {% if seller.status != 'activated' %}
+                    <a href="{% url 'AdminActivateSellerAction' %}?id={{ seller.id }}&status=activated" class="btn btn-sm btn-success">Activate</a>
+                    {% endif %}
+                    {% if seller.status != 'blocked' %}
+                    <a href="{% url 'AdminActivateSellerAction' %}?id={{ seller.id }}&status=blocked" class="btn btn-sm btn-danger">Block</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No sellers registered yet.</div>
+{% endif %}
+<a href="{% url 'AdminHome' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Seller Home{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-success"><i class="fas fa-store"></i> Welcome, {{ seller.name }}!</h3>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
+                <h5>Add Crops</h5>
+                <p>Add new crops for sale</p>
+                <a href="{% url 'SellerAddItemsForm' %}" class="btn btn-success">Add Items</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-list fa-3x text-info mb-3"></i>
+                <h5>My Crops</h5>
+                <p>View and manage your crops</p>
+                <a href="{% url 'SellersCommodities' %}" class="btn btn-info">View Crops</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-shopping-basket fa-3x text-warning mb-3"></i>
+                <h5>View Cart Orders</h5>
+                <p>See buyer cart requests</p>
+                <a href="{% url 'SellerViewCarts' %}" class="btn btn-warning">View Carts</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

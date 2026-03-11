@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Purchased Items{% endblock %}
+{% block content %}
+<h3 class="text-primary"><i class="fas fa-receipt"></i> My Purchased Items</h3>
+<hr>
+{% if purchased %}
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Crop Name</th>
+                <th>Seller</th>
+                <th>Price (₹)</th>
+                <th>Image</th>
+                <th>Purchase Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in purchased %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.cropname }}</td>
+                <td>{{ item.sellername }}</td>
+                <td>{{ item.price }}</td>
+                <td>
+                    {% if item.file %}
+                    <img src="/media/{{ item.file }}" width="80" height="60" style="object-fit:cover;">
+                    {% endif %}
+                </td>
+                <td>{{ item.cdate|date:"M d, Y" }}</td>
+                <td><span class="badge badge-success">{{ item.status }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No purchases yet. <a href="{% url 'BuyerSearchProductsForm' %}">Start shopping!</a></div>
+{% endif %}
+<a href="{% url 'BuyerUserHome' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Home</a>
+{% endblock %}

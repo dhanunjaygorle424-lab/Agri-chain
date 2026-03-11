@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+<h3 class="text-primary"><i class="fas fa-search"></i> Search Results {% if search %}for "{{ search }}"{% endif %}</h3>
+<hr>
+{% if crops %}
+<div class="row">
+    {% for crop in crops %}
+    <div class="col-md-4">
+        <div class="card">
+            {% if crop.file %}
+            <img src="/media/{{ crop.file }}" class="card-img-top" style="height:200px; object-fit:cover;">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ crop.cropname }}</h5>
+                <p class="text-muted">By: {{ crop.sellername }}</p>
+                <p class="card-text">{{ crop.description|truncatewords:15 }}</p>
+                <h5 class="text-success">₹{{ crop.price }}</h5>
+                <a href="{% url 'BuyerAddCropsToCart' %}?id={{ crop.id }}" class="btn btn-success btn-block">
+                    <i class="fas fa-cart-plus"></i> Add to Cart
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">No crops found matching your search.</div>
+{% endif %}
+<a href="{% url 'BuyerSearchProductsForm' %}" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Search Again</a>
+<a href="{% url 'BuyerUserHome' %}" class="btn btn-primary mt-3"><i class="fas fa-home"></i> Home</a>
+{% endblock %}

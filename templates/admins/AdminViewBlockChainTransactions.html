@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Blockchain Transactions{% endblock %}
+{% block content %}
+<h3 class="text-danger"><i class="fas fa-link"></i> Blockchain Transaction Records</h3>
+<hr>
+{% if transactions %}
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-sm">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th colspan="7" class="bg-dark text-white text-center">Current Block</th>
+                <th colspan="7" class="bg-secondary text-white text-center">Previous Block</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Index</th>
+                <th>Timestamp</th>
+                <th>Sender</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Proof</th>
+                <th>Prev Hash</th>
+                <th>Index</th>
+                <th>Timestamp</th>
+                <th>Sender</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Proof</th>
+                <th>Prev Hash</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in transactions %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ t.c_index }}</td>
+                <td>{{ t.c_timestamp|truncatechars:15 }}</td>
+                <td>{{ t.c_sender }}</td>
+                <td>{{ t.c_recipient }}</td>
+                <td>{{ t.c_amount }}</td>
+                <td>{{ t.c_proof }}</td>
+                <td><code>{{ t.c_previous_hash|truncatechars:15 }}</code></td>
+                <td>{{ t.p_index }}</td>
+                <td>{{ t.p_timestamp|truncatechars:15 }}</td>
+                <td>{{ t.p_sender }}</td>
+                <td>{{ t.p_recipient }}</td>
+                <td>{{ t.p_amount }}</td>
+                <td>{{ t.p_proof }}</td>
+                <td><code>{{ t.p_previous_hash|truncatechars:15 }}</code></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No blockchain transactions recorded yet.</div>
+{% endif %}
+<a href="{% url 'AdminHome' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+{% endblock %}

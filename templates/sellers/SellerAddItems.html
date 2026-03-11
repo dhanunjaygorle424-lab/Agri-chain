@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Add Crop{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4><i class="fas fa-plus-circle"></i> Add New Crop</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'SellerAddItemsAction' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Crop Name</label>
+                        <input type="text" name="cropname" class="form-control" placeholder="Enter crop name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₹)</label>
+                        <input type="number" name="price" step="0.01" class="form-control" placeholder="Enter price" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description" class="form-control" rows="4" placeholder="Describe your crop" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Crop Image</label>
+                        <input type="file" name="file" class="form-control-file" required>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Add Crop</button>
+                </form>
+            </div>
+        </div>
+        <a href="{% url 'SellerUserHome' %}" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+</div>
+{% endblock %}

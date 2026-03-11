@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4><i class="fas fa-credit-card"></i> Blockchain Payment Checkout</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Bank:</strong> {{ bank }} | <strong>Total Amount:</strong> ₹{{ total }}
+                </div>
+
+                <h5>Items in Cart:</h5>
+                <ul class="list-group mb-3">
+                    {% for cart in carts %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>{{ cart.cropname }} ({{ cart.sellername }})</span>
+                        <span>₹{{ cart.price }}</span>
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item d-flex justify-content-between bg-light">
+                        <strong>Total</strong>
+                        <strong>₹{{ total }}</strong>
+                    </li>
+                </ul>
+
+                <form method="POST" action="{% url 'StartBlockChainTransaction' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="totalamount" value="{{ total }}">
+                    <input type="hidden" name="recipientname" value="{{ bank }}">
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="number" name="cardnumber" class="form-control" placeholder="Enter card number" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Name on Card</label>
+                                <input type="text" name="nameoncard" class="form-control" placeholder="Name on card" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>CVV</label>
+                                <input type="number" name="cvv" class="form-control" placeholder="CVV" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Expiry</label>
+                                <input type="text" name="cardexpiry" class="form-control" placeholder="MM/YY" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block btn-lg">
+                        <i class="fas fa-lock"></i> Pay ₹{{ total }} via Blockchain
+                    </button>
+                </form>
+            </div>
+        </div>
+        <a href="{% url 'BuyyerCheckCartData' %}" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Back to Cart</a>
+    </div>
+</div>
+{% endblock %}

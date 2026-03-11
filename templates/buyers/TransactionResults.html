@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Transaction Success{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="alert alert-success text-center">
+            <h3><i class="fas fa-check-circle"></i> Transaction Successful!</h3>
+            <p>Your payment of <strong>₹{{ totalamount }}</strong> has been processed and recorded on the blockchain.</p>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">
+                <h5><i class="fas fa-cube"></i> Current Block (Block #{{ block.index }})</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><th>Index</th><td>{{ block.index }}</td></tr>
+                    <tr><th>Timestamp</th><td>{{ block.timestamp }}</td></tr>
+                    <tr><th>Proof</th><td>{{ block.proof }}</td></tr>
+                    <tr><th>Previous Hash</th><td><code>{{ block.previous_hash }}</code></td></tr>
+                    <tr><th>Transactions</th><td>{{ block.transactions }}</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-secondary text-white">
+                <h5><i class="fas fa-cube"></i> Previous Block (Block #{{ previous_block.index }})</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><th>Index</th><td>{{ previous_block.index }}</td></tr>
+                    <tr><th>Timestamp</th><td>{{ previous_block.timestamp }}</td></tr>
+                    <tr><th>Proof</th><td>{{ previous_block.proof }}</td></tr>
+                    <tr><th>Previous Hash</th><td><code>{{ previous_block.previous_hash }}</code></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5><i class="fas fa-link"></i> Full Blockchain ({{ chain|length }} blocks)</h5>
+            </div>
+            <div class="card-body">
+                {% for b in chain %}
+                <div class="border p-2 mb-2 rounded">
+                    <strong>Block #{{ b.index }}</strong> | Proof: {{ b.proof }} | Hash: <code>{{ b.previous_hash|truncatechars:20 }}</code>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <a href="{% url 'BuyerUserHome' %}" class="btn btn-primary"><i class="fas fa-home"></i> Go to Home</a>
+            <a href="{% url 'BuyerViewPurchasedDetails' %}" class="btn btn-success"><i class="fas fa-receipt"></i> View Purchases</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

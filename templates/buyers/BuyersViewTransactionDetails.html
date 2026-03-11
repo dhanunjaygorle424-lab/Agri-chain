@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Transaction History{% endblock %}
+{% block content %}
+<h3 class="text-primary"><i class="fas fa-link"></i> My Transaction History</h3>
+<hr>
+{% if transactions %}
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Amount (₹)</th>
+                <th>Recipient (Bank)</th>
+                <th>Card Number</th>
+                <th>Name on Card</th>
+                <th>Expiry</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in transactions %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ t.totalamount }}</td>
+                <td>{{ t.recipientname }}</td>
+                <td>****{{ t.cradnumber|stringformat:"d"|truncatechars:8 }}</td>
+                <td>{{ t.nameoncard }}</td>
+                <td>{{ t.cardexpiry }}</td>
+                <td>{{ t.trnx_date|date:"M d, Y H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No transactions yet.</div>
+{% endif %}
+<a href="{% url 'BuyerUserHome' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Home</a>
+{% endblock %}

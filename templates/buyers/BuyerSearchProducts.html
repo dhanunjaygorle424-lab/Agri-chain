@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Search Crops{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-search"></i> Search Crops</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'BuyerSearchCropsAction' %}">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Enter crop name (e.g., Rice, Wheat, Tomato)" required>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                        </div>
+                    </div>
+                </form>
+                <p class="text-muted mt-2">Tip: Leave blank and search to see all available crops.</p>
+            </div>
+        </div>
+        <a href="{% url 'BuyerUserHome' %}" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+</div>
+{% endblock %}

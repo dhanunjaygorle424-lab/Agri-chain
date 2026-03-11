@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}My Crops{% endblock %}
+{% block content %}
+<h3 class="text-success"><i class="fas fa-list"></i> My Crops</h3>
+<hr>
+{% if crops %}
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Crop Name</th>
+                <th>Price (₹)</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Date Added</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for crop in crops %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ crop.cropname }}</td>
+                <td>{{ crop.price }}</td>
+                <td>{{ crop.description|truncatewords:20 }}</td>
+                <td>
+                    {% if crop.file %}
+                    <img src="/media/{{ crop.file }}" width="80" height="60" style="object-fit:cover;">
+                    {% endif %}
+                </td>
+                <td>{{ crop.cdate|date:"M d, Y" }}</td>
+                <td>
+                    <a href="{% url 'SellerUpdateProducts' %}?id={{ crop.id }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a>
+                    <a href="{% url 'SellerDeleteProducts' %}?id={{ crop.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this crop?')"><i class="fas fa-trash"></i> Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No crops added yet. <a href="{% url 'SellerAddItemsForm' %}">Add your first crop!</a></div>
+{% endif %}
+<a href="{% url 'SellerUserHome' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Home</a>
+{% endblock %}

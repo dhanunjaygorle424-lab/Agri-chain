@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Home - Blockchain Farmers Portal{% endblock %}
+{% block content %}
+<div class="hero-section text-center rounded">
+    <h1><i class="fas fa-seedling"></i> Blockchain Farmers Portal</h1>
+    <p class="lead">A Study of Blockchain Technology in Farmer's Portal</p>
+    <p>Secure, transparent agricultural commerce powered by blockchain</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-store fa-3x text-success mb-3"></i>
+                <h5 class="card-title">For Sellers</h5>
+                <p class="card-text">Register as a farmer, list your crops, manage inventory, and reach buyers directly.</p>
+                <a href="{% url 'SellerLogin' %}" class="btn btn-success">Seller Login</a>
+                <a href="{% url 'SellerRegister' %}" class="btn btn-outline-success">Register</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-shopping-cart fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">For Buyers</h5>
+                <p class="card-text">Browse crops, add to cart, and make secure blockchain-verified purchases.</p>
+                <a href="{% url 'BuyerLogin' %}" class="btn btn-primary">Buyer Login</a>
+                <a href="{% url 'BuyerRegister' %}" class="btn btn-outline-primary">Register</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-user-shield fa-3x text-danger mb-3"></i>
+                <h5 class="card-title">Admin Panel</h5>
+                <p class="card-text">Manage users, activate accounts, and view blockchain transaction records.</p>
+                <a href="{% url 'AdminLogin' %}" class="btn btn-danger">Admin Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4><i class="fas fa-link"></i> How Blockchain Works Here</h4>
+                <p>Every purchase transaction is recorded as a block in our blockchain. Each block contains transaction details, a timestamp, proof of work, and a cryptographic hash linking it to the previous block — ensuring immutability and transparency.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

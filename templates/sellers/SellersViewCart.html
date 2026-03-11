@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Buyer Cart Orders{% endblock %}
+{% block content %}
+<h3 class="text-success"><i class="fas fa-shopping-basket"></i> Buyer Cart Orders</h3>
+<hr>
+{% if carts %}
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Buyer Name</th>
+                <th>Buyer Email</th>
+                <th>Crop Name</th>
+                <th>Price (₹)</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cart in carts %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ cart.buyerusername }}</td>
+                <td>{{ cart.buyeruseremail }}</td>
+                <td>{{ cart.cropname }}</td>
+                <td>{{ cart.price }}</td>
+                <td><span class="badge badge-{% if cart.status == 'purchased' %}success{% else %}warning{% endif %}">{{ cart.status }}</span></td>
+                <td>{{ cart.cdate|date:"M d, Y" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No cart orders found.</div>
+{% endif %}
+<a href="{% url 'SellerUserHome' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Home</a>
+{% endblock %}
