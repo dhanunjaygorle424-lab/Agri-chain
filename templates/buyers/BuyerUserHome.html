@@ -5,6 +5,11 @@
     <div class="col-md-12">
         <h3 class="text-primary"><i class="fas fa-shopping-cart"></i> Welcome, {{ buyer.name }}!
             <span class="badge badge-warning">Cart: {{ cart_count }}</span>
+            {% if notification_count > 0 %}
+            <a href="{% url 'BuyerViewNotifications' %}" class="badge badge-danger" style="text-decoration:none;">
+                <i class="fas fa-bell"></i> {{ notification_count }} New
+            </a>
+            {% endif %}
         </h3>
         <hr>
     </div>
@@ -49,6 +54,21 @@
                 <h5>Transaction History</h5>
                 <p>View blockchain transactions</p>
                 <a href="{% url 'BuyerViewTransactinDetails' %}" class="btn btn-info">View Transactions</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-bell fa-3x text-danger mb-3"></i>
+                <h5>Notifications</h5>
+                <p>View seller approvals & updates</p>
+                <a href="{% url 'BuyerViewNotifications' %}" class="btn btn-danger">
+                    View Notifications
+                    {% if notification_count > 0 %}
+                    <span class="badge badge-light">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
             </div>
         </div>
     </div>

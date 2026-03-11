@@ -13,6 +13,7 @@
                 <th>Seller</th>
                 <th>Price (₹)</th>
                 <th>Image</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -29,23 +30,44 @@
                     {% endif %}
                 </td>
                 <td>
+                    {% if cart.status == 'approved' %}
+                    <span class="badge badge-success"><i class="fas fa-check-circle"></i> Approved</span>
+                    {% elif cart.status == 'rejected' %}
+                    <span class="badge badge-danger"><i class="fas fa-times-circle"></i> Rejected</span>
+                    {% else %}
+                    <span class="badge badge-warning"><i class="fas fa-clock"></i> Awaiting Seller Approval</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if cart.status == 'pending' or cart.status == 'approved' %}
                     <a href="{% url 'BuyerDeleteanItemfromCart' %}?id={{ cart.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Remove this item?')">
                         <i class="fas fa-trash"></i> Remove
                     </a>
+                    {% elif cart.status == 'rejected' %}
+                    <a href="{% url 'BuyerDeleteanItemfromCart' %}?id={{ cart.id }}" class="btn btn-sm btn-secondary" onclick="return confirm('Remove this rejected item?')">
+                        <i class="fas fa-trash"></i> Remove
+                    </a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+{% if total > 0 %}
 <div class="card bg-light">
     <div class="card-body">
-        <h4>Total Amount: <span class="text-success">₹{{ total }}</span></h4>
+        <h4>Total Approved Amount: <span class="text-success">₹{{ total }}</span></h4>
         <a href="{% url 'BuyerTotalAmountCheckOut' %}" class="btn btn-success btn-lg">
-            <i class="fas fa-credit-card"></i> Proceed to Checkout
+            <i class="fas fa-credit-card"></i> Proceed to Checkout (Approved Items)
         </a>
     </div>
 </div>
+{% else %}
+<div class="alert alert-warning">
+    <i class="fas fa-info-circle"></i> No approved items yet. Please wait for seller approval before checkout.
+</div>
+{% endif %}
 {% else %}
 <div class="alert alert-info">Your cart is empty. <a href="{% url 'BuyerSearchProductsForm' %}">Start shopping!</a></div>
 {% endif %}

@@ -15,6 +15,7 @@
                 <th>Price (₹)</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -25,8 +26,34 @@
                 <td>{{ cart.buyeruseremail }}</td>
                 <td>{{ cart.cropname }}</td>
                 <td>{{ cart.price }}</td>
-                <td><span class="badge badge-{% if cart.status == 'purchased' %}success{% else %}warning{% endif %}">{{ cart.status }}</span></td>
+                <td>
+                    {% if cart.status == 'purchased' %}
+                    <span class="badge badge-success">Purchased</span>
+                    {% elif cart.status == 'approved' %}
+                    <span class="badge badge-info">Approved</span>
+                    {% elif cart.status == 'rejected' %}
+                    <span class="badge badge-danger">Rejected</span>
+                    {% else %}
+                    <span class="badge badge-warning">Pending</span>
+                    {% endif %}
+                </td>
                 <td>{{ cart.cdate|date:"M d, Y" }}</td>
+                <td>
+                    {% if cart.status == 'pending' %}
+                    <a href="{% url 'SellerApproveOrder' %}?id={{ cart.id }}" class="btn btn-sm btn-success" onclick="return confirm('Approve this order?')">
+                        <i class="fas fa-check"></i> Approve
+                    </a>
+                    <a href="{% url 'SellerRejectOrder' %}?id={{ cart.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Reject this order?')">
+                        <i class="fas fa-times"></i> Reject
+                    </a>
+                    {% elif cart.status == 'approved' %}
+                    <span class="text-success"><i class="fas fa-check-circle"></i> Approved</span>
+                    {% elif cart.status == 'rejected' %}
+                    <span class="text-danger"><i class="fas fa-times-circle"></i> Rejected</span>
+                    {% elif cart.status == 'purchased' %}
+                    <span class="text-success"><i class="fas fa-shopping-bag"></i> Completed</span>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

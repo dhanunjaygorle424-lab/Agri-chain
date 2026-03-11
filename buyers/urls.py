@@ -14,4 +14,6 @@ urlpatterns = [
     path('StartBlockChainTransaction/', views.StartBlockChainTransaction, name='StartBlockChainTransaction'),
     path('BuyerViewPurchasedDetails/', views.BuyerViewPurchasedDetails, name='BuyerViewPurchasedDetails'),
     path('BuyerViewTransactinDetails/', views.BuyerViewTransactinDetails, name='BuyerViewTransactinDetails'),
+    path('BuyerViewNotifications/', views.BuyerViewNotifications, name='BuyerViewNotifications'),
+    path('BuyerMarkNotificationRead/', views.BuyerMarkNotificationRead, name='BuyerMarkNotificationRead'),
 ]

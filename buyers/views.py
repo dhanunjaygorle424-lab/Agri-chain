@@ -6,6 +6,7 @@ from buyers.models import (
     BuyerCropCartModels,
     BuyerTransactionModels,
     BlockChainTransactionModel,
+    BuyerNotificationModel,
 )
 from buyers.forms import BuyerUserRegistrationForm
 from sellers.models import FarmersCropsModels
@@ -51,7 +52,8 @@ def BuyerUserLoginCheck(request):
                 request.session['buyername'] = buyer.name
                 request.session['buyeremail'] = buyer.email
                 cart_count = BuyerCropCartModels.objects.filter(buyerusername=buyer.name, status='pending').count()
-                return render(request, 'buyers/BuyerUserHome.html', {'buyer': buyer, 'cart_count': cart_count})
+                notification_count = BuyerNotificationModel.objects.filter(buyer_username=buyer.name, is_read=False).count()
+                return render(request, 'buyers/BuyerUserHome.html', {'buyer': buyer, 'cart_count': cart_count, 'notification_count': notification_count})
             else:
                 messages.error(request, 'Your account is not activated yet. Please wait for admin approval.')
                 return render(request, 'BuyerLogin.html')
@@ -67,7 +69,8 @@ def BuyerUserHome(request):
         return redirect('BuyerLogin')
     buyer = BuyerUserRegistrationModel.objects.get(loginid=loginid)
     cart_count = BuyerCropCartModels.objects.filter(buyerusername=buyer.name, status='pending').count()
-    return render(request, 'buyers/BuyerUserHome.html', {'buyer': buyer, 'cart_count': cart_count})
+    notification_count = BuyerNotificationModel.objects.filter(buyer_username=buyer.name, is_read=False).count()
+    return render(request, 'buyers/BuyerUserHome.html', {'buyer': buyer, 'cart_count': cart_count, 'notification_count': notification_count})
 
 
 def BuyerSearchProductsForm(request):
@@ -111,8 +114,9 @@ def BuyyerCheckCartData(request):
     if not loginid:
         return redirect('BuyerLogin')
     buyername = request.session.get('buyername')
-    carts = BuyerCropCartModels.objects.filter(buyerusername=buyername, status='pending')
-    total = sum(c.price for c in carts)
+    carts = BuyerCropCartModels.objects.filter(buyerusername=buyername, status__in=['pending', 'approved', 'rejected'])
+    approved_carts = [c for c in carts if c.status == 'approved']
+    total = sum(c.price for c in approved_carts)
     return render(request, 'buyers/BuyerCheckInCart.html', {'carts': carts, 'total': total})
 
 
@@ -128,8 +132,11 @@ def BuyerTotalAmountCheckOut(request):
     if not loginid:
         return redirect('BuyerLogin')
     buyername = request.session.get('buyername')
-    carts = BuyerCropCartModels.objects.filter(buyerusername=buyername, status='pending')
+    carts = BuyerCropCartModels.objects.filter(buyerusername=buyername, status='approved')
     total = sum(c.price for c in carts)
+    if not carts:
+        messages.error(request, 'No approved items to checkout. Please wait for seller approval.')
+        return redirect('BuyyerCheckCartData')
     banks = ['State Bank of India', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Punjab National Bank',
              'Bank of Baroda', 'Canara Bank', 'Union Bank of India']
     selected_bank = random.choice(banks)
@@ -195,7 +202,7 @@ def StartBlockChainTransaction(request):
         )
 
         # Update cart status
-        carts = BuyerCropCartModels.objects.filter(buyerusername=buyername, status='pending')
+        carts = BuyerCropCartModels.objects.filter(buyerusername=buyername, status='approved')
         carts.update(status='purchased')
 
         return render(request, 'buyers/TransactionResults.html', {
@@ -223,3 +230,22 @@ def BuyerViewTransactinDetails(request):
     buyername = request.session.get('buyername')
     transactions = BuyerTransactionModels.objects.filter(buyername=buyername)
     return render(request, 'buyers/BuyersViewTransactionDetails.html', {'transactions': transactions})
+
+
+def BuyerViewNotifications(request):
+    loginid = request.session.get('buyerloginid')
+    if not loginid:
+        return redirect('BuyerLogin')
+    buyername = request.session.get('buyername')
+    notifications = BuyerNotificationModel.objects.filter(buyer_username=buyername).order_by('-created_at')
+    return render(request, 'buyers/BuyerNotifications.html', {'notifications': notifications})
+
+
+def BuyerMarkNotificationRead(request):
+    loginid = request.session.get('buyerloginid')
+    if not loginid:
+        return redirect('BuyerLogin')
+    notif_id = request.GET.get('id')
+    BuyerNotificationModel.objects.filter(id=notif_id).update(is_read=True)
+    messages.success(request, 'Notification marked as read.')
+    return redirect('BuyerViewNotifications')

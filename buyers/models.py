@@ -55,6 +55,21 @@ class BuyerTransactionModels(models.Model):
         db_table = "BuyerTransactionTable"
 
 
+class BuyerNotificationModel(models.Model):
+    buyer_username = models.CharField(max_length=100)
+    message = models.CharField(max_length=500)
+    order_id = models.IntegerField()
+    notification_type = models.CharField(max_length=50)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.buyer_username} - {self.notification_type}"
+
+    class Meta:
+        db_table = 'BuyerNotifications'
+
+
 class BlockChainTransactionModel(models.Model):
     c_index = models.CharField(max_length=100)
     c_timestamp = models.CharField(max_length=100)

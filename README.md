@@ -56,7 +56,7 @@ This adds:
 ### 5. Start the server
 
 ```bash
-python manage.py runserver 
+python manage.py runserver
 ```
 
 Visit: **http://127.0.0.1:8000/**

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from sellers.models import SellerUserRegistrationModel, FarmersCropsModels
 from sellers.forms import SellerUserRegistrationForm
-from buyers.models import BuyerCropCartModels
+from buyers.models import BuyerCropCartModels, BuyerNotificationModel
 
 
 def SellerLogin(request):
@@ -134,3 +134,45 @@ def SellerViewCarts(request):
     sellername = request.session.get('sellername')
     carts = BuyerCropCartModels.objects.filter(sellername=sellername)
     return render(request, 'sellers/SellersViewCart.html', {'carts': carts})
+
+
+def SellerApproveOrder(request):
+    loginid = request.session.get('sellerloginid')
+    if not loginid:
+        return redirect('SellerLogin')
+    cart_id = request.GET.get('id')
+    try:
+        cart = BuyerCropCartModels.objects.get(id=cart_id)
+        cart.status = 'approved'
+        cart.save()
+        BuyerNotificationModel.objects.create(
+            buyer_username=cart.buyerusername,
+            message=f'Your order for "{cart.cropname}" has been approved by {cart.sellername}. You can now proceed to checkout.',
+            order_id=cart.id,
+            notification_type='approved',
+        )
+        messages.success(request, f'Order for {cart.cropname} approved successfully!')
+    except BuyerCropCartModels.DoesNotExist:
+        messages.error(request, 'Order not found.')
+    return redirect('SellerViewCarts')
+
+
+def SellerRejectOrder(request):
+    loginid = request.session.get('sellerloginid')
+    if not loginid:
+        return redirect('SellerLogin')
+    cart_id = request.GET.get('id')
+    try:
+        cart = BuyerCropCartModels.objects.get(id=cart_id)
+        cart.status = 'rejected'
+        cart.save()
+        BuyerNotificationModel.objects.create(
+            buyer_username=cart.buyerusername,
+            message=f'Your order for "{cart.cropname}" has been rejected by {cart.sellername}.',
+            order_id=cart.id,
+            notification_type='rejected',
+        )
+        messages.success(request, f'Order for {cart.cropname} rejected.')
+    except BuyerCropCartModels.DoesNotExist:
+        messages.error(request, 'Order not found.')
+    return redirect('SellerViewCarts')
